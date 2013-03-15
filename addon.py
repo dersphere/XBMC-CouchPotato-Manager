@@ -74,12 +74,8 @@ plugin = Plugin()
 
 
 @plugin.cached()
-def get_status_list(status_id=None):
-    status_list = api.get_status_list()
-    if not status_id:
-        return status_list
-    else:
-        return [s for s in status_list if s['id'] == status_id]
+def get_status_list():
+    return api.get_status_list()
 
 
 @plugin.route('/')
@@ -145,8 +141,12 @@ def show_movies(status):
             ),
         ]
 
+    def get_status(status_id):
+        return [s for s in status_list if s['id'] == status_id]
+
     releases = plugin.get_storage('releases')
     releases.clear()
+    status_list = get_status_list()
     items = []
     plugin.set_content('movies')
     if not status:
@@ -158,7 +158,7 @@ def show_movies(status):
         info = movie['library']['info']
         movie_id = str(movie['library_id'])
         label = info['titles'][0]
-        status_label = get_status_list(movie['status_id'])[0]['label']
+        status_label = get_status(movie['status_id'])[0]['label']
         label = u'[%s] %s' % (status_label, label)
         releases[movie_id] = movie['releases']
         items.append({
