@@ -25,7 +25,7 @@
     <string id="30120">Connection error</string>
     <string id="30121">Wrong User-Credentials or Api Key</string>
     <string id="30122">Wrong Network Settings or CP not running.</string>
-    <string id="30123">Do you want to set them now?</string>
+    <string id="30123">Do you want to change them now?</string>
     <!-- Noticications -->
     <string id="30130">Movie added</string>
     <string id="30130">No Movie found</string>
