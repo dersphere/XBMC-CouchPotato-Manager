@@ -52,7 +52,7 @@ class CouchPotatoApi():
         self.log(
             'connect: hostname="%s", port="%s", '
             'use_https="%s", username="%s", api_key="%s"'
-            % (hostname, port, use_https, username, api_key)
+            % (hostname, port, use_https, username, api_key is not None)
         )
         self.hostname = hostname
         self.port = port
