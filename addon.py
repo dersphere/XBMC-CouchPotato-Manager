@@ -272,7 +272,7 @@ def show_releases(library_id):
         info = release['info']
         t = info['type'][0].upper()
         items.append({
-            'label': '[%s-%d] %s' % (t, info['score'], info['name']),
+            'label': '[%s %d] %s' % (t, info['score'], info['name']),
             'info': {
                 'size': info['provider'] * 1024,
                 'plot': '[CR]'.join((
