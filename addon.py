@@ -188,7 +188,10 @@ def show_movies(status):
 
 @plugin.route('/movies/add/')
 def add_new_wanted():
-    search_title = plugin.keyboard(heading=_('enter_movie_title'))
+    if 'title' in plugin.request.args:
+        search_title = plugin.request.args['title'][0]
+    else:
+        search_title = plugin.keyboard(heading=_('enter_movie_title'))
     if search_title:
         url = plugin.url_for(
             endpoint='add_new_wanted_result',
