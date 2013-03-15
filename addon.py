@@ -143,7 +143,8 @@ def show_movies(status):
         movies = api.get_movies()
     else:
         movies = api.get_movies(status=status)
-    for movie in movies:
+    i = 0
+    for i, movie in enumerate(movies):
         info = movie['library']['info']
         movie_id = str(movie['library_id'])
         label = info['titles'][0]
@@ -154,6 +155,7 @@ def show_movies(status):
             'label': label,
             'thumbnail': (info['images']['poster'] or [''])[0],
             'info': {
+                'count': i,
                 'originaltitle': info['original_title'],
                 'writer': ', '.join(info['writers']),
                 'director': ', '.join(info['directors']),
@@ -163,6 +165,8 @@ def show_movies(status):
                 'genre': ', '.join(info['genres']),
                 'tagline': info['tagline'],
                 'actors': info['actors'],  # broken in XBMC Frodo
+                'rating': info['rating'].get('imdb', [0, 0])[0],
+                'votes': info['rating'].get('imdb', [0, 0])[1]
             },
             'replace_context_menu': True,
             'context_menu': context_menu(movie_id),
@@ -177,11 +181,13 @@ def show_movies(status):
     releases.sync()
     items.append({
         'label': _('add_new_wanted'),
+        'info': {'count': i + 1},
         'path': plugin.url_for(
             endpoint='add_new_wanted'
         )
     })
-    return plugin.finish(items)
+    sort_methods = ['playlist_order', 'video_rating', 'video_year']
+    return plugin.finish(items, sort_methods=sort_methods)
 
 
 @plugin.route('/movies/add/')
