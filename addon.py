@@ -33,6 +33,7 @@ STRINGS = {
     'delete_release': 30103,
     'download_release': 30104,
     'ignore_release': 30105,
+    'youtube_trailer': 30106,
     # Dialogs
     'enter_movie_title': 30110,
     'select_movie': 30111,
@@ -62,6 +63,11 @@ STRINGS = {
     'size_mb': 30155,
     'description': 30156,
 }
+
+YT_TRAILER_URL = (
+    'plugin://plugin.video.youtube/'
+    '?path=/root/search&feed=search&search=%s+Trailer'
+)
 
 
 plugin = Plugin()
@@ -111,7 +117,7 @@ def show_root_menu():
 @plugin.route('/movies/', name='show_all_movies', options={'status': None})
 @plugin.route('/movies/status/<status>/')
 def show_movies(status):
-    def context_menu(movie_id):
+    def context_menu(movie_id, movie_title):
         return [
             (
                 _('refresh_releases'),
@@ -126,6 +132,10 @@ def show_movies(status):
                     endpoint='delete_movie',
                     library_id=movie_id
                 )
+            ),
+            (
+                _('youtube_trailer'),
+                'XBMC.Container.Update(%s)' % YT_TRAILER_URL % movie_title
             ),
             (
                 _('addon_settings'),
@@ -169,7 +179,7 @@ def show_movies(status):
                 'votes': info['rating'].get('imdb', [0, 0])[1]
             },
             'replace_context_menu': True,
-            'context_menu': context_menu(movie_id),
+            'context_menu': context_menu(movie_id, info['titles'][0]),
             'properties': {
                 'fanart_image': (info['images']['backdrop'] or [''])[0],
             },
