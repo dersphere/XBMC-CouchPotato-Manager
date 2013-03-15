@@ -67,10 +67,6 @@ STRINGS = {
 plugin = Plugin()
 
 
-class NetworkError(Exception):
-    pass
-
-
 @plugin.cached()
 def get_status_list(status_id=None):
     status_list = api.get_status_list()
