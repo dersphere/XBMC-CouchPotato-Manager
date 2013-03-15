@@ -153,7 +153,7 @@ def show_movies(status):
         releases[movie_id] = movie['releases']
         items.append({
             'label': label,
-            'thumbnail': info['images']['poster'][0],
+            'thumbnail': (info['images']['poster'] or [''])[0],
             'info': {
                 'originaltitle': info['original_title'],
                 'writer': ', '.join(info['writers']),
@@ -168,7 +168,7 @@ def show_movies(status):
             'replace_context_menu': True,
             'context_menu': context_menu(movie_id),
             'properties': {
-                'fanart_image': info['images']['backdrop'][0],
+                'fanart_image': (info['images']['backdrop'] or [''])[0],
             },
             'path': plugin.url_for(
                 endpoint='show_releases',
