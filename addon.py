@@ -111,7 +111,6 @@ def show_root_menu():
 @plugin.route('/movies/', name='show_all_movies', options={'status': None})
 @plugin.route('/movies/status/<status>/')
 def show_movies(status):
-
     def context_menu(movie_id):
         return [
             (
@@ -180,8 +179,7 @@ def show_movies(status):
         'label': _('add_new_wanted'),
         'path': plugin.url_for(
             endpoint='add_new_wanted'
-        ),
-        'replace_context_menu': True
+        )
     })
     return plugin.finish(items)
 
