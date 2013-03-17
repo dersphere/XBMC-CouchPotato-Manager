@@ -1,2 +1,9 @@
-0.0.1
+0.0.2 (17.03.2013)
+- added "Search Trailer on YouTube" in movie context menu
+- added sort methods
+- improved some strings
+- fixed some small issues
+- code cosmetics
+
+0.0.1 (14.03.2013)
 - initial release
