@@ -166,22 +166,22 @@ def show_movies(status):
             'thumbnail': (info['images']['poster'] or [''])[0],
             'info': {
                 'count': i,
-                'originaltitle': info['original_title'],
-                'writer': ', '.join(info['writers']),
-                'director': ', '.join(info['directors']),
-                'code': info['imdb'],
-                'year': info['year'],
-                'plot': info['plot'],
-                'genre': ', '.join(info['genres']),
-                'tagline': info['tagline'],
-                'actors': info['actors'],  # broken in XBMC Frodo
-                'rating': info['rating'].get('imdb', [0, 0])[0],
-                'votes': info['rating'].get('imdb', [0, 0])[1]
+                'originaltitle': info.get('original_title', ''),
+                'writer': ', '.join(info.get('writers', [])),
+                'director': ', '.join(info.get('directors', [])),
+                'code': info.get('imdb', ''),
+                'year': info.get('year', ''),
+                'plot': info.get('plot', ''),
+                'genre': ', '.join(info.get('genres', [])),
+                'tagline': info.get('tagline', ''),
+                'actors': info.get('actors', ''),  # broken in XBMC Frodo
+                'rating': info.get('rating', {}).get('imdb', [0, 0])[0],
+                'votes': info.get('rating', {}).get('imdb', [0, 0])[1]
             },
             'replace_context_menu': True,
             'context_menu': context_menu(movie_id, info['titles'][0]),
             'properties': {
-                'fanart_image': (info['images']['backdrop'] or [''])[0],
+                'fanart_image': (info['images'].get('backdrop') or [''])[0],
             },
             'path': plugin.url_for(
                 endpoint='show_releases',
