@@ -24,8 +24,10 @@ from resources.lib.api import \
 STRINGS = {
     # Root menu
     'all_movies': 30000,
-    # Sub menu
     'add_new_wanted': 30001,
+    'wanted_movies': 30002,
+    'done_movies': 30003,
+    'status_list': 30004,
     # Context menu
     'addon_settings': 30100,
     'refresh_releases': 30101,
@@ -91,14 +93,44 @@ def show_root_menu():
             ),
         ]
 
-    status_list = get_status_list()
     items = [
+        {'label': _('add_new_wanted'),
+         'replace_context_menu': True,
+         'context_menu': context_menu(),
+         'path': plugin.url_for(endpoint='add_new_wanted')},
         {'label': _('all_movies'),
          'replace_context_menu': True,
          'context_menu': context_menu(),
-         'path': plugin.url_for(endpoint='show_all_movies')}
+         'path': plugin.url_for(endpoint='show_all_movies')},
+        {'label': _('wanted_movies'),
+         'replace_context_menu': True,
+         'context_menu': context_menu(),
+         'path': plugin.url_for(endpoint='show_movies', status='wanted')},
+        {'label': _('done_movies'),
+         'replace_context_menu': True,
+         'context_menu': context_menu(),
+         'path': plugin.url_for(endpoint='show_movies', status='done')},
+        {'label': _('status_list'),
+         'replace_context_menu': True,
+         'context_menu': context_menu(),
+         'path': plugin.url_for(endpoint='show_status_list')},
     ]
-    for status in status_list:
+    return plugin.finish(items)
+
+
+@plugin.route('/status_list/')
+def show_status_list():
+    def context_menu():
+        return [
+            (
+                _('addon_settings'),
+                'XBMC.RunPlugin(%s)' % plugin.url_for(
+                    endpoint='open_settings'
+                )
+            ),
+        ]
+    items = []
+    for status in get_status_list():
         items.append({
             'label': status['label'],
             'replace_context_menu': True,
@@ -190,13 +222,6 @@ def show_movies(status):
             ),
         })
     releases.sync()
-    items.append({
-        'label': _('add_new_wanted'),
-        'info': {'count': i + 1},
-        'path': plugin.url_for(
-            endpoint='add_new_wanted'
-        )
-    })
     sort_methods = ['playlist_order', 'video_rating', 'video_year']
     return plugin.finish(items, sort_methods=sort_methods)
 
