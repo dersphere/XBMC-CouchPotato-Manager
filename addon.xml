@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.couchpotato_manager" name="CouchPotato Manager" version="0.0.2" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.couchpotato_manager" name="CouchPotato Manager" version="0.0.3" provider-name="Tristan Fischer (sphere@dersphere.de)">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -11,6 +11,6 @@
         <language></language>
         <platform>all</platform>
         <summary lang="en">Control CP Server from XBMC</summary>
-        <description lang="en">With CouchPotato Manager you can manage your CouchPotato Server from within XBMC.[CR]Features:[CR]- List your movies (with metadata)[CR]- Add new movies to your wanted list[CR]- Choose releases[CR]- Start downloads</description>
+        <description lang="en">With CouchPotato Manager you can manage your CouchPotato Server from within XBMC.[CR]Features:[CR]- List your movies (with metadata)[CR]- Search Trailers for wanted movies[CR]- Add new movies to your wanted list[CR]- Choose releases[CR]- Start downloads</description>
     </extension>
 </addon>
