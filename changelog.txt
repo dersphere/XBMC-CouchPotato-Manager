@@ -1,4 +1,8 @@
 0.0.3 (18.03.2013)
+- new root menu logic
+- added "full forced search" to root menu context
+- added possibility to select a default profile in add-on settings
+- hide api key in settings
 - fixed issues when no movie metadata is available
 - improved debugging on URLERROR-Exceptions
 
