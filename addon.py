@@ -87,15 +87,19 @@ def show_root_menu():
     def context_menu():
         return [
             (
-                _('full_refresh'),
-                'XBMC.RunPlugin(%s)' % plugin.url_for(
-                    endpoint='do_full_refresh'
-                )
-            ),
-            (
                 _('addon_settings'),
                 'XBMC.RunPlugin(%s)' % plugin.url_for(
                     endpoint='open_settings'
+                )
+            ),
+        ]
+
+    def context_menu_wanted():
+        return [
+            (
+                _('full_refresh'),
+                'XBMC.RunPlugin(%s)' % plugin.url_for(
+                    endpoint='do_full_refresh'
                 )
             ),
         ]
@@ -111,7 +115,7 @@ def show_root_menu():
          'path': plugin.url_for(endpoint='show_all_movies')},
         {'label': _('wanted_movies'),
          'replace_context_menu': True,
-         'context_menu': context_menu(),
+         'context_menu': context_menu_wanted(),
          'path': plugin.url_for(endpoint='show_movies', status='active')},
         {'label': _('done_movies'),
          'replace_context_menu': True,
