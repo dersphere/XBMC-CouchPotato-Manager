@@ -170,11 +170,11 @@ def show_movies(status):
                 'writer': ', '.join(info.get('writers', [])),
                 'director': ', '.join(info.get('directors', [])),
                 'code': info.get('imdb', ''),
-                'year': info.get('year', ''),
+                'year': info.get('year', 0),
                 'plot': info.get('plot', ''),
                 'genre': ', '.join(info.get('genres', [])),
                 'tagline': info.get('tagline', ''),
-                'actors': info.get('actors', ''),  # broken in XBMC Frodo
+                'actors': info.get('actors', []),  # broken in XBMC Frodo
                 'rating': info.get('rating', {}).get('imdb', [0, 0])[0],
                 'votes': info.get('rating', {}).get('imdb', [0, 0])[1]
             },
