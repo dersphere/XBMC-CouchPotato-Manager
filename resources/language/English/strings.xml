@@ -6,7 +6,7 @@
 <strings>
     <!-- Root menu -->
     <string id="30000">All Movies</string>
-    <string id="30001">Add new Movie</string>
+    <string id="30001">Add new Movie to Wanted-list</string>
     <string id="30002">Wanted Movies</string>
     <string id="30003">Done Movies</string>
     <string id="30004">Status List</string>
