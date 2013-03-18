@@ -9,5 +9,5 @@
     <setting id="use_https" type="bool" label="30302" default="false" />
     <setting id="hostname" type="text" label="30303" default="localhost" />
     <setting id="port" type="number" label="30304" default="5050" />
-    <!-- <setting id="test" type="action" label="30304" action="RunPlugin(plugin://plugin.program.couchpotato_server/test)"/> -->
+    <setting id="default_profile" type="action" label="30306" action="RunPlugin(plugin://plugin.video.couchpotato_manager/settings/default_profile)"/>
 </settings>

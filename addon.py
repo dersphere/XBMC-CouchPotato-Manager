@@ -40,6 +40,7 @@ STRINGS = {
     'select_profile': 30112,
     'delete_movie_head': 30113,
     'delete_movie_l1': 30114,
+    'select_default_profile': 30115,
     # Error dialogs
     'connection_error': 30120,
     'wrong_credentials': 30121,
@@ -227,20 +228,26 @@ def add_new_wanted_result(search_title):
         )
         if selected >= 0:
             selected_movie = movies[selected]
-            profiles = api.get_profiles()
-            items = [profile['label'] for profile in profiles]
-            selected = xbmcgui.Dialog().select(
-                _('select_profile'), items
-            )
-            if selected >= 0:
-                selected_profile = profiles[selected]
-                success = api.add_wanted(
-                    profile_id=selected_profile['id'],
-                    movie_identifier=selected_movie['imdb'],
-                    movie_title=selected_movie['titles'][0]
+            if not plugin.get_setting('default_profile', str):
+                profiles = api.get_profiles()
+                items = [profile['label'] for profile in profiles]
+                selected = xbmcgui.Dialog().select(
+                    _('select_profile'), items
                 )
-                if success:
-                    plugin.notify(msg=_('wanted_added'))
+                if selected >= 0:
+                    selected_profile = profiles[selected]
+                    profile_id = selected_profile['id']
+                else:
+                    return
+            else:
+                profile_id = plugin.get_setting('default_profile', int)
+            success = api.add_wanted(
+                profile_id=profile_id,
+                movie_identifier=selected_movie['imdb'],
+                movie_title=selected_movie['titles'][0]
+            )
+            if success:
+                plugin.notify(msg=_('wanted_added'))
     else:
         plugin.notify(msg=_('no_movie_found'))
 
@@ -363,27 +370,18 @@ def show_release_help():
     )
 
 
-# @plugin.route('/test')
-# def test_connection():
-#     cp_api = CouchPotatoApi()
-#     try:
-#         cp_api.connect(
-#             hostname=plugin.get_setting('hostname'),
-#             port=plugin.get_setting('port'),
-#             username=plugin.get_setting('username'),
-#             password=plugin.get_setting('password'),
-#             api_key=plugin.get_setting('api_key')
-#         )
-#     except AuthenticationError:
-#         msg = _('wrong_credentials')
-#     except ConnectionError:
-#         msg = _('wrong_network')
-#     else:
-#         msg = _('test_success')
-#     xbmcgui.Dialog().ok(
-#         _('test_success_head'),
-#         msg,
-#     )
+@plugin.route('/settings/default_profile')
+def set_default_profile():
+    profiles = api.get_profiles()
+    items = [profile['label'] for profile in profiles]
+    selected = xbmcgui.Dialog().select(
+        _('select_default_profile'), items
+    )
+    if selected >= 0:
+        selected_profile = profiles[selected]
+        plugin.set_setting('default_profile', str(selected_profile['id']))
+    elif selected == -1:
+        plugin.set_setting('default_profile', '')
 
 
 @plugin.route('/settings')

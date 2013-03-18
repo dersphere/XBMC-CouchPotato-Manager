@@ -22,6 +22,7 @@
     <string id="30112">Please select the profile</string>
     <string id="30113">Delete Movie</string>
     <string id="30114">Are you sure to delete?</string>
+    <string id="30115">Please select your default profile</string>
     <!-- Error dialogs -->
     <string id="30120">Connection error</string>
     <string id="30121">Wrong User-Credentials or Api Key</string>
@@ -51,5 +52,6 @@
     <string id="30303">Hostname</string>
     <string id="30304">Port</string>
     <string id="30305">Api Key</string>
+    <string id="30306">Set default profile</string>
     <string id="30310">You only need username/password OR Api Key!</string>
 </strings>
