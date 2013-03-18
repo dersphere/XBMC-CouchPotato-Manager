@@ -166,7 +166,8 @@ class CouchPotatoApi():
                 raise AuthenticationError
             else:
                 raise ConnectionError
-        except URLError:
+        except URLError, error:
+            self.log('__urlopen URLError: %s' % error)
             raise ConnectionError
         # self.log('_api_call response: %s' % repr(json_data))
         return json_data
