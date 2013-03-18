@@ -36,6 +36,7 @@ STRINGS = {
     'download_release': 30104,
     'ignore_release': 30105,
     'youtube_trailer': 30106,
+    'full_refresh': 30107,
     # Dialogs
     'enter_movie_title': 30110,
     'select_movie': 30111,
@@ -86,6 +87,12 @@ def show_root_menu():
     def context_menu():
         return [
             (
+                _('full_refresh'),
+                'XBMC.RunPlugin(%s)' % plugin.url_for(
+                    endpoint='do_full_refresh'
+                )
+            ),
+            (
                 _('addon_settings'),
                 'XBMC.RunPlugin(%s)' % plugin.url_for(
                     endpoint='open_settings'
@@ -105,15 +112,15 @@ def show_root_menu():
         {'label': _('wanted_movies'),
          'replace_context_menu': True,
          'context_menu': context_menu(),
-         'path': plugin.url_for(endpoint='show_movies', status='wanted')},
+         'path': plugin.url_for(endpoint='show_movies', status='active')},
         {'label': _('done_movies'),
          'replace_context_menu': True,
          'context_menu': context_menu(),
          'path': plugin.url_for(endpoint='show_movies', status='done')},
-        {'label': _('status_list'),
-         'replace_context_menu': True,
-         'context_menu': context_menu(),
-         'path': plugin.url_for(endpoint='show_status_list')},
+        # {'label': _('status_list'),
+        #  'replace_context_menu': True,
+        #  'context_menu': context_menu(),
+        #  'path': plugin.url_for(endpoint='show_status_list')},
     ]
     return plugin.finish(items)
 
@@ -343,6 +350,13 @@ def show_releases(library_id):
             ),
         })
     return plugin.finish(items)
+
+
+@plugin.route('/movies/all/refresh')
+def do_full_refresh():
+    success = api.do_full_refresh()
+    if success:
+        plugin.notify(msg=_('success'))
 
 
 @plugin.route('/movies/<library_id>/refresh')
