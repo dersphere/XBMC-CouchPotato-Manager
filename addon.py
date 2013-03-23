@@ -51,8 +51,8 @@ STRINGS = {
     'want_set_now': 30123,
     # Noticications
     'wanted_added': 30130,
-    'no_movie_found': 30130,
-    'success': 30130,
+    'no_movie_found': 30131,
+    'success': 30132,
     # Help Dialog
     'release_help_head': 30140,
     'release_help_l1': 30141,

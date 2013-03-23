@@ -33,8 +33,8 @@
     <string id="30123">Do you want to change them now?</string>
     <!-- Noticications -->
     <string id="30130">Movie added</string>
-    <string id="30130">No Movie found</string>
-    <string id="30130">Success</string>
+    <string id="30131">No Movie found</string>
+    <string id="30132">Success</string>
     <!-- Help Dialog -->
     <string id="30140">Please use context menu</string>
     <string id="30141">You need to open the context-menu</string>
