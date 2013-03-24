@@ -158,7 +158,7 @@ class CouchPotatoApi():
         url = '%s/api/%s/%s/' % (self._api_url, self.api_key, endpoint)
         if params:
             url += '?%s' % urlencode(params)
-        self.log('_api_call using url: %s' % url)
+        # self.log('_api_call using url: %s' % url)
         try:
             response = urlopen(Request(url))
             json_data = json.load(response)
