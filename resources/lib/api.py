@@ -42,20 +42,23 @@ class CouchPotatoApi():
         self.connected = False
         self.hostname = None
         self.port = None
+        self.url_base = None
         self.use_https = None
         self.username = None
         self.password = None
         self.api_key = None
 
     def connect(self, hostname, port, use_https=False,
-                username=None, password=None, api_key=None):
+                username=None, password=None, api_key=None, url_base=None):
         self.log(
-            'connect: hostname="%s", port="%s", '
-            'use_https="%s", username="%s", api_key="%s"'
-            % (hostname, port, use_https, username, api_key is not None)
+            'connect: hostname="%s" port="%s" use_https="%s" username="%s" '
+            'api_key="%s" url_base="%s"'
+            % (hostname, port, use_https, username,
+               api_key is not None, url_base)
         )
         self.hostname = hostname
         self.port = port
+        self.url_base = url_base
         self.use_https = use_https
         self.username = username
         self.password = password
@@ -155,7 +158,7 @@ class CouchPotatoApi():
         url = '%s/api/%s/%s/' % (self._api_url, self.api_key, endpoint)
         if params:
             url += '?%s' % urlencode(params)
-        # self.log('_api_call using url: %s' % url)
+        self.log('_api_call using url: %s' % url)
         try:
             response = urlopen(Request(url))
             json_data = json.load(response)
@@ -174,7 +177,8 @@ class CouchPotatoApi():
     @property
     def _api_url(self):
         proto = 'https' if self.use_https else 'http'
-        return '%s://%s:%s' % (proto, self.hostname, self.port)
+        url_base = '/%s' % self.url_base if self.url_base else ''
+        return '%s://%s:%s%s' % (proto, self.hostname, self.port, url_base)
 
     def log(self, text):
         print u'[%s]: %s' % (self.__class__.__name__, repr(text))
