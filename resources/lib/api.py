@@ -143,7 +143,7 @@ class CouchPotatoApi():
         }
         url = '%s/getkey/?%s' % (self._api_url, urlencode(params))
         try:
-            json_data = json.load(urlopen(Request(url)))
+            json_data = json.loads(urlopen(Request(url)).read())
         except URLError:
             raise ConnectionError
         if json_data.get('success') and json_data.get('api_key'):
@@ -161,7 +161,7 @@ class CouchPotatoApi():
         # self.log('_api_call using url: %s' % url)
         try:
             response = urlopen(Request(url))
-            json_data = json.load(response)
+            json_data = json.loads(urlopen(Request(url)).read())
         except HTTPError, error:
             self.log('__urlopen HTTPError: %s' % error)
             if error.fp.read() == 'Wrong API key used':
