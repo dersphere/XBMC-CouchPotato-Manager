@@ -100,7 +100,7 @@ class CouchPotatoApi():
         return self._api_call('movie.add', params).get('added')
 
     def do_full_refresh(self):
-        return self._api_call('searcher.full_search', params).get('success')
+        return self._api_call('searcher.full_search').get('success')
 
     def refresh_releases(self, library_id):
         params = {
