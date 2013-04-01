@@ -279,8 +279,7 @@ def add_new_wanted_result(search_title):
                 profile_id = plugin.get_setting('default_profile', int)
             success = api.add_wanted(
                 profile_id=profile_id,
-                movie_identifier=selected_movie['imdb'],
-                movie_title=selected_movie['titles'][0]
+                movie_identifier=selected_movie['imdb']
             )
             if success:
                 plugin.notify(msg=_('wanted_added'))
