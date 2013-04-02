@@ -239,6 +239,10 @@ def show_movies(status):
 
 @plugin.route('/movies/add/')
 def add_new_wanted():
+    if 'imdb_id' in plugin.request.args:
+        imdb_id = plugin.request.args['imdb_id'][0]
+        if imdb_id:
+            return add_new_wanted_by_id(imdb_id)
     if 'title' in plugin.request.args:
         search_title = plugin.request.args['title'][0]
     else:
