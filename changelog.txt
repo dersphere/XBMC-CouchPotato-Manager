@@ -1,3 +1,7 @@
+0.0.5
+- fixed "force full search"
+- added two methods for external plugins to add movies by imdb-id
+
 0.0.4 (24.03.2013)
 - implemented "base url" setting (needed for mod_proxy)
 
