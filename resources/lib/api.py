@@ -159,7 +159,6 @@ class CouchPotatoApi():
             url += '?%s' % urlencode(params)
         # self.log('_api_call using url: %s' % url)
         try:
-            response = urlopen(Request(url))
             json_data = json.loads(urlopen(Request(url)).read())
         except HTTPError, error:
             self.log('__urlopen HTTPError: %s' % error)
