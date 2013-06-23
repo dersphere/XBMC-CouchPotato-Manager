@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <category label="General">
+    <category label="30308">
         <setting id="username" type="text" label="30300" />
         <setting id="password" type="text" label="30301" option="hidden" />
         <setting type="sep" />
@@ -9,10 +9,10 @@
         <setting id="port" type="number" label="30304" default="5050" />
         <setting id="default_profile" type="action" label="30306" action="RunPlugin(plugin://plugin.video.couchpotato_manager/settings/default_profile)"/>
     </category>
-    <category label="Advanced">
+    <category label="30309">
         <setting id="url_base" type="text" label="30307" default="" />
-        <setting id="api_key" type="text" label="API-Key" />
-        <setting id="ba_username" type="text" label="Basic Auth Username" />
-        <setting id="ba_password" type="text" label="Basic Auth Password" option="hidden" />
+        <setting id="api_key" type="text" label="30310" />
+        <setting id="ba_username" type="text" label="30311" />
+        <setting id="ba_password" type="text" label="30312" option="hidden" />
     </category>
 </settings>
