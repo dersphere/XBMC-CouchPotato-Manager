@@ -490,7 +490,7 @@ def log(text):
 
 def _(string_id):
     if string_id in STRINGS:
-        return plugin.get_string(STRINGS[string_id])
+        return plugin.get_string(STRINGS[string_id]).encode('utf-8')
     else:
         log('String is missing: %s' % string_id)
         return string_id
