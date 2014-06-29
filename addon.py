@@ -77,52 +77,9 @@ plugin = Plugin()
 
 
 @plugin.route('/')
-def show_root_menu():
-    def context_menu():
-        return [
-            (
-                _('addon_settings'),
-                'XBMC.RunPlugin(%s)' % plugin.url_for(
-                    endpoint='open_settings'
-                )
-            ),
-        ]
+def show_movies():
 
-    def context_menu_wanted():
-        return [
-            (
-                _('full_refresh'),
-                'XBMC.RunPlugin(%s)' % plugin.url_for(
-                    endpoint='do_full_refresh'
-                )
-            ),
-        ]
-
-    items = [
-        {'label': _('add_new_wanted'),
-         'replace_context_menu': True,
-         'context_menu': context_menu(),
-         'path': plugin.url_for(endpoint='add_new_wanted')},
-        {'label': _('all_movies'),
-         'replace_context_menu': True,
-         'context_menu': context_menu(),
-         'path': plugin.url_for(endpoint='show_all_movies')},
-        {'label': _('wanted_movies'),
-         'replace_context_menu': True,
-         'context_menu': context_menu_wanted(),
-         'path': plugin.url_for(endpoint='show_movies', status='active')},
-        {'label': _('done_movies'),
-         'replace_context_menu': True,
-         'context_menu': context_menu(),
-         'path': plugin.url_for(endpoint='show_movies', status='done')},
-    ]
-    return plugin.finish(items)
-
-
-@plugin.route('/movies/', name='show_all_movies', options={'status': None})
-@plugin.route('/movies/status/<status>/')
-def show_movies(status):
-    def context_menu(movie_id, movie_title):
+    def context_menu_movie(movie_id, movie_title):
         return [
             (
                 _('refresh_releases'),
@@ -143,6 +100,12 @@ def show_movies(status):
                 'XBMC.Container.Update(%s)' % YT_TRAILER_URL % movie_title
             ),
             (
+                _('full_refresh'),
+                'XBMC.RunPlugin(%s)' % plugin.url_for(
+                    endpoint='do_full_refresh'
+                )
+            ),
+            (
                 _('addon_settings'),
                 'XBMC.RunPlugin(%s)' % plugin.url_for(
                     endpoint='open_settings'
@@ -150,14 +113,28 @@ def show_movies(status):
             ),
         ]
 
+    def context_menu_empty():
+        return [
+            (
+                _('addon_settings'),
+                'XBMC.RunPlugin(%s)' % plugin.url_for(
+                    endpoint='open_settings'
+                )
+            ),
+            (
+                _('full_refresh'),
+                'XBMC.RunPlugin(%s)' % plugin.url_for(
+                    endpoint='do_full_refresh'
+                )
+            )
+        ]
+
+
     releases = plugin.get_storage('releases')
     releases.clear()
     items = []
     plugin.set_content('movies')
-    if not status:
-        movies = api.get_movies()
-    else:
-        movies = api.get_movies(status=status)
+    movies = api.get_movies()
     i = 0
     for i, movie in enumerate(movies):
         info = movie['info']
@@ -184,7 +161,7 @@ def show_movies(status):
                 'votes': info.get('rating', {}).get('imdb', [0, 0])[1]
             },
             'replace_context_menu': True,
-            'context_menu': context_menu(movie_id, info['titles'][0]),
+            'context_menu': context_menu_movie(movie_id, info['titles'][0]),
             'properties': {
                 'fanart_image': (info['images'].get('backdrop') or [''])[0],
             },
@@ -195,6 +172,12 @@ def show_movies(status):
         })
     releases.sync()
     sort_methods = ['playlist_order', 'video_rating', 'video_year']
+    items.append({
+        'label': _('add_new_wanted'),
+        'replace_context_menu': True,
+        'context_menu': context_menu_empty(),
+        'path': plugin.url_for(endpoint='add_new_wanted')
+    })
     return plugin.finish(items, sort_methods=sort_methods)
 
 
@@ -257,7 +240,7 @@ def ask_profile():
         selected_profile = profiles[selected]
         profile_id = selected_profile['_id']
     else:
-        profile_id = plugin.get_setting('default_profile', int)
+        profile_id = plugin.get_setting('default_profile', str)
     return profile_id
 
 
