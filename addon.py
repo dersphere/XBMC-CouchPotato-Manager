@@ -17,7 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from xbmcswift2 import Plugin, xbmc, xbmcgui
+from xbmcswift2 import Plugin, xbmcgui
 from resources.lib.api import \
     CouchPotatoApi, AuthenticationError, ConnectionError
 
@@ -27,7 +27,6 @@ STRINGS = {
     'add_new_wanted': 30001,
     'wanted_movies': 30002,
     'done_movies': 30003,
-    'status_list': 30004,
     # Context menu
     'addon_settings': 30100,
     'refresh_releases': 30101,
@@ -77,11 +76,6 @@ YT_TRAILER_URL = (
 plugin = Plugin()
 
 
-@plugin.cached()
-def get_status_list():
-    return api.get_status_list()
-
-
 @plugin.route('/')
 def show_root_menu():
     def context_menu():
@@ -121,36 +115,7 @@ def show_root_menu():
          'replace_context_menu': True,
          'context_menu': context_menu(),
          'path': plugin.url_for(endpoint='show_movies', status='done')},
-        # {'label': _('status_list'),
-        #  'replace_context_menu': True,
-        #  'context_menu': context_menu(),
-        #  'path': plugin.url_for(endpoint='show_status_list')},
     ]
-    return plugin.finish(items)
-
-
-@plugin.route('/status_list/')
-def show_status_list():
-    def context_menu():
-        return [
-            (
-                _('addon_settings'),
-                'XBMC.RunPlugin(%s)' % plugin.url_for(
-                    endpoint='open_settings'
-                )
-            ),
-        ]
-    items = []
-    for status in get_status_list():
-        items.append({
-            'label': status['label'],
-            'replace_context_menu': True,
-            'context_menu': context_menu(),
-            'path': plugin.url_for(
-                endpoint='show_movies',
-                status=status['identifier']
-            )
-        })
     return plugin.finish(items)
 
 
@@ -185,12 +150,8 @@ def show_movies(status):
             ),
         ]
 
-    def get_status(status_id):
-        return [s for s in status_list if s['id'] == status_id]
-
     releases = plugin.get_storage('releases')
     releases.clear()
-    status_list = get_status_list()
     items = []
     plugin.set_content('movies')
     if not status:
@@ -199,10 +160,10 @@ def show_movies(status):
         movies = api.get_movies(status=status)
     i = 0
     for i, movie in enumerate(movies):
-        info = movie['library']['info']
-        movie_id = str(movie['library_id'])
+        info = movie['info']
+        movie_id = str(movie['_id'])
         label = info['titles'][0]
-        status_label = get_status(movie['status_id'])[0]['label']
+        status_label = movie['status']
         label = u'[%s] %s' % (status_label, label)
         releases[movie_id] = movie['releases']
         items.append({
@@ -294,7 +255,7 @@ def ask_profile():
         if selected == -1:
             return
         selected_profile = profiles[selected]
-        profile_id = selected_profile['id']
+        profile_id = selected_profile['_id']
     else:
         profile_id = plugin.get_setting('default_profile', int)
     return profile_id
@@ -359,10 +320,10 @@ def show_releases(library_id):
                 )),
             },
             'replace_context_menu': True,
-            'context_menu': context_menu(release['id']),
+            'context_menu': context_menu(release['_id']),
             'path': plugin.url_for(
                 endpoint='show_release_help',
-                foo=release['id']  # to have items with different URLs
+                foo=release['_id']  # to have items with different URLs
             ),
         })
     return plugin.finish(items)
@@ -429,12 +390,12 @@ def show_release_help():
 def set_default_profile():
     profiles = api.get_profiles()
     items = [profile['label'] for profile in profiles]
-    selected = xbmcgui.Dialog().select(
+    selected = xbmcgui.Dialog().select( 
         _('select_default_profile'), items
     )
     if selected >= 0:
         selected_profile = profiles[selected]
-        plugin.set_setting('default_profile', str(selected_profile['id']))
+        plugin.set_setting('default_profile', str(selected_profile['_id']))
     elif selected == -1:
         plugin.set_setting('default_profile', '')
 
